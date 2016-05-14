@@ -26,6 +26,7 @@
 				{
 					//这里图方便没有检验LauncherCoreCreationOption.Create()返回的是不是null
 					var core = LauncherCore.Create();
+                    Console.WriteLine(core.JavaPath);
 					core.GameExit += core_GameExit;
 					core.GameLog += core_GameLog;
 					var result = core.Launch(new LaunchOptions

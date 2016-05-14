@@ -22,7 +22,7 @@
 		{
 			try
 			{
-				var rootReg = Registry.LocalMachine.OpenSubKey("SOFTWARE");
+                var rootReg = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey("SOFTWARE");
 				return rootReg == null
 					? new string[0]
 					: FindJavaInternal(rootReg).Union(FindJavaInternal(rootReg.OpenSubKey("Wow6432Node")));
