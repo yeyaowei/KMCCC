@@ -139,13 +139,13 @@
 						{
 							continue;
 						}
-						version.Libraries.Add(new Library
-						{
-							NS = names[0],
-							Name = names[1],
-							Version = names[2],
-                            Url = lib.Url
-						});
+                        version.Libraries.Add(new Library
+                        {
+                            NS = names[0],
+                            Name = names[1],
+                            Version = names[2],
+                            DownloadInfo = lib.GetDownloadInfo()
+                        });
 					}
 					else
 					{
@@ -153,13 +153,13 @@
 						{
 							continue;
 						}
-						var native = new Native
-						{
-							NS = names[0],
-							Name = names[1],
-							Version = names[2],
-							NativeSuffix = lib.Natives["windows"].Replace("${arch}", SystemTools.GetArch()),
-                            Url = lib.Url
+                        var native = new Native
+                        {
+                            NS = names[0],
+                            Name = names[1],
+                            Version = names[2],
+                            NativeSuffix = lib.FormatArch(),
+                            DownloadInfo = lib.GetDownloadInfo()
 						};
 						version.Natives.Add(native);
 						if (lib.Extract != null)

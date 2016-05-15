@@ -1,17 +1,18 @@
 ﻿namespace KMCCC.Launcher
 {
-	#region
+    using Modules.JVersion;
+    #region
 
-	using System;
-	using System.Collections.Generic;
-	using Tools;
+    using System;
+    using System.Collections.Generic;
+    using Tools;
 
-	#endregion
+    #endregion
 
-	/// <summary>
-	///     版本定位器接口
-	/// </summary>
-	public interface IVersionLocator
+    /// <summary>
+    ///     版本定位器接口
+    /// </summary>
+    public interface IVersionLocator
 	{
 		/// <summary>
 		///     设置定位器基于的核心
@@ -100,8 +101,9 @@
         ///<summary>
         ///     Url
         /// </summary>
-        public string Url { get; set; }
-	}
+
+        public JDownloadInfo DownloadInfo { get; set; }
+    }
 
     /// <summary>
     ///     表示本机实现
@@ -136,7 +138,8 @@
         ///<summary>
         ///     Url
         /// </summary>
-        public string Url { get; set; }
+
+        public JDownloadInfo DownloadInfo { get; set; }
     }
 
 	/// <summary>
@@ -152,7 +155,7 @@
 
 		public static string GetVersionRootPath(this LauncherCore core, string versionId)
 		{
-			return String.Format(@"{0}\versions\{1}\", core.GameRootPath, versionId);
+			return string.Format(@"{0}\versions\{1}\", core.GameRootPath, versionId);
 		}
 
 		public static string GetVersionJarPath(this LauncherCore core, Version version)
@@ -162,7 +165,7 @@
 
 		public static string GetVersionJarPath(this LauncherCore core, string versionId)
 		{
-			return String.Format(@"{0}\versions\{1}\{1}.jar", core.GameRootPath, versionId);
+			return string.Format(@"{0}\versions\{1}\{1}.jar", core.GameRootPath, versionId);
 		}
 
 		public static string GetVersionJsonPath(this LauncherCore core, Version version)
@@ -172,17 +175,25 @@
 
 		public static string GetVersionJsonPath(this LauncherCore core, string versionId)
 		{
-			return String.Format(@"{0}\versions\{1}\{1}.json", core.GameRootPath, versionId);
+			return string.Format(@"{0}\versions\{1}\{1}.json", core.GameRootPath, versionId);
 		}
 
 		public static string GetLibPath(this LauncherCore core, Library lib)
 		{
-			return String.Format(@"{0}\libraries\{1}\{2}\{3}\{2}-{3}.jar", core.GameRootPath, lib.NS.Replace(".", "\\"), lib.Name, lib.Version);
+            if (!string.IsNullOrWhiteSpace(lib.DownloadInfo.Path))
+            {
+                return string.Format(@"{0}\libraries\{1}", core.GameRootPath, lib.DownloadInfo.Path);
+            }
+			return string.Format(@"{0}\libraries\{1}\{2}\{3}\{2}-{3}.jar", core.GameRootPath, lib.NS.Replace(".", "\\"), lib.Name, lib.Version);
 		}
 
 		public static string GetNativePath(this LauncherCore core, Native native)
 		{
-			return String.Format(@"{0}\libraries\{1}\{2}\{3}\{2}-{3}-{4}.jar", core.GameRootPath, native.NS.Replace(".", "\\"), native.Name, native.Version,
+            if (!string.IsNullOrWhiteSpace(native.DownloadInfo.Path))
+            {
+                return string.Format(@"{0}\libraries\{1}", core.GameRootPath, native.DownloadInfo.Path);
+            }
+            return string.Format(@"{0}\libraries\{1}\{2}\{3}\{2}-{3}-{4}.jar", core.GameRootPath, native.NS.Replace(".", "\\"), native.Name, native.Version,
 				native.NativeSuffix);
 		}
 	}

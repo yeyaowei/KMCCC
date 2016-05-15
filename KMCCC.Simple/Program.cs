@@ -26,36 +26,24 @@
 				{
 					//这里图方便没有检验LauncherCoreCreationOption.Create()返回的是不是null
 					var core = LauncherCore.Create();
-                    Console.WriteLine(core.JavaPath);
-					core.GameExit += core_GameExit;
-					core.GameLog += core_GameLog;
-					var result = core.Launch(new LaunchOptions
-					{
-						Version = core.GetVersion("****"),
-						Authenticator = new OfflineAuthenticator("KBlackcn"),
-						//Authenticator = new YggdrasilLogin("****@****", "****", true),
-						//Server = new ServerInfo {Address = "mc.hypixel.net"},
-						Mode = null,
-						MaxMemory = 2048,
-						MinMemory = 1024,
-						Size = new WindowSize {Height = 768, Width = 1280}
-					}, (Action<MinecraftLaunchArguments>) (x => { }));
-					if (!result.Success)
-					{
-						Console.WriteLine("启动失败：[{0}] {1}", result.ErrorType, result.ErrorMessage);
-						if (result.Exception != null)
-						{
-							Console.WriteLine(result.Exception.Message);
-							Console.WriteLine(result.Exception.Source);
-							Console.WriteLine(result.Exception.StackTrace);
-						}
-						Console.ReadKey();
-						return;
-					}
-					Are.WaitOne();
-					Console.WriteLine("游戏已关闭");
-					Console.ReadKey();
-				}
+                    Console.WriteLine("列出游戏版本：");
+                    foreach(var version in core.GetVersions())
+                    {
+                        Console.WriteLine(version.Id);
+                    }
+                    Console.WriteLine("列出丢失lib：");
+                    var ver = core.GetVersion("1.8.9");
+                    foreach(var lib in ver.Libraries)
+                    {
+                        Console.WriteLine(lib.Name + " : " + core.GetLibPath(lib));
+                    }
+                    Console.WriteLine("列出丢失native：");
+                    foreach (var native in ver.Natives)
+                    {
+                        Console.WriteLine(native.Name + " : " + core.GetNativePath(native));
+                    }
+                    Console.ReadKey();
+                }
 			}
 		}
 
